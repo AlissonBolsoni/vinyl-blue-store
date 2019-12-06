@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    container_name: music-sale-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: musicsale
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_USER: rootmusicsale
+      MYSQL_PASSWORD: 123456
+    ports:
+      - 3306:3306
+    networks:
+      - musicsale-network
+
+networks:
+  musicsale-network:
+    driver: bridge

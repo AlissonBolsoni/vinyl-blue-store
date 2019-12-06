@@ -1,0 +1,6 @@
+description = "Casos de uso do projeto"
+
+dependencies {
+    implementation libs.inject
+    testImplementation libs.unit_test
+}

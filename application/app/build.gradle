@@ -1,0 +1,52 @@
+//https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/#getting-started
+plugins {
+    id("org.springframework.boot") version "2.1.7.RELEASE"
+    id("io.spring.dependency-management") version "1.0.8.RELEASE"
+}
+apply plugin: 'war'
+
+//Generate jar with other name
+bootWar {
+    archiveFileName = "${rootProject.ext.archive_file_name}"
+}
+
+//task to copy jar to root build dir
+task copyBootWar(type: Copy) {
+    from bootWar
+    into rootProject.buildDir
+}
+
+//Execute copy after compile
+compileJava.finalizedBy copyBootWar
+
+//Automatic Property Expansion Using Gradle
+// (https://docs.spring.io/spring-boot/docs/current/reference/html/howto-properties-and-configuration.html)
+processResources {
+    filesMatching("application.yml") {
+        expand('project': rootProject.properties)
+    }
+}
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    'br.com.alissonbolsoni.musicsale/Application**',
+                    'br.com.alissonbolsoni.musicsale/ServletInitializer**'
+            ])
+        })
+    }
+}
+
+dependencies {
+    implementation project(":application:core")
+
+    implementation libs.database
+    implementation libs.spring_config
+    implementation libs.rest
+    implementation libs.coroutines
+    implementation libs.inject
+
+    testImplementation libs.spring_test
+    testImplementation libs.unit_test
+}

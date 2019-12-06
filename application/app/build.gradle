@@ -3,21 +3,20 @@ plugins {
     id("org.springframework.boot") version "2.1.7.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
 }
-apply plugin: 'war'
 
 //Generate jar with other name
-bootWar {
+bootJar {
     archiveFileName = "${rootProject.ext.archive_file_name}"
 }
 
 //task to copy jar to root build dir
-task copyBootWar(type: Copy) {
-    from bootWar
+task copyBootJar(type: Copy) {
+    from bootJar
     into rootProject.buildDir
 }
 
 //Execute copy after compile
-compileJava.finalizedBy copyBootWar
+compileJava.finalizedBy copyBootJar
 
 //Automatic Property Expansion Using Gradle
 // (https://docs.spring.io/spring-boot/docs/current/reference/html/howto-properties-and-configuration.html)

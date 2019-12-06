@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/AlissonBolsoni/vinyl-blue-store/tree/master.svg?style=svg)](https://circleci.com/gh/AlissonBolsoni/vinyl-blue-store/tree/master)
 # MUSIC SALE
 
 A `Vinyl BlueStore` é uma API para consulta e vendas de discos com cashback na compra.  

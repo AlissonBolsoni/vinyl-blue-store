@@ -51,13 +51,13 @@ class AlbumsController(
             val albums = albumsUseCase.getAlbumsByGenre(genre ?: "", localPageable)
             ResponseEntity(albums.toPageDto(albums.elements.toAlbumDTO()), HttpStatus.OK)
         } catch (e: Exception) {
-            val orderDto = PageImpl<AlbumDTO>(
+            val albumDTO = PageImpl<AlbumDTO>(
                 listOf(AlbumDTO().apply { message = e.localizedMessage }),
                 PageRequest.of(0, 1),
                 1
             )
             ResponseEntity(
-                orderDto,
+                albumDTO,
                 HttpStatus.NOT_FOUND
             )
         }

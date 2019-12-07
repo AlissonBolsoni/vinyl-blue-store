@@ -67,7 +67,7 @@ internal class OrderUseCaseImplTest {
         val start = sdf.parse("20/12/2019")
         val end = sdf.parse("15/12/2019")
 
-        assertThrows(IllegalArgumentException::class.java){
+        assertThrows(Exception::class.java){
             useCase.getOrderBetweenDates(start, end, LocalPageable(0, 1))
         }
     }

@@ -9,8 +9,6 @@ import br.com.alissonbolsoni.bluestore.core.usecase.NewOrderUseCase
 import br.com.alissonbolsoni.bluestore.core.usecase.repository.AlbumRepository
 import br.com.alissonbolsoni.bluestore.core.usecase.repository.CashbackRepository
 import br.com.alissonbolsoni.bluestore.core.usecase.repository.OrderRepository
-import jdk.nashorn.internal.objects.NativeString
-import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Named
@@ -24,12 +22,17 @@ class NewOrderUseCaseImpl(
 ) : NewOrderUseCase {
 
     override fun registerNewOrder(albumsIds: List<Int>): OrderResponse {
+
+        if (albumsIds.isEmpty()) throw IllegalArgumentException("A lista de albums não pode ser vazia")
+
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val calendar = Calendar.getInstance()
         val cashbackByDayOfWeek = cashbackRepository.getCashbackByDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK))
 
         val map = HashMap<Album, Cashback>()
         val albums = albumRepository.getAlbumByIds(albumsIds)
+        if (albums.isEmpty()) throw Exception("Não foi possível encontrar os discos selecionados.")
+
         var total: Double = 0.0
         var cashback: Double = 0.0
         albums.forEach { album ->

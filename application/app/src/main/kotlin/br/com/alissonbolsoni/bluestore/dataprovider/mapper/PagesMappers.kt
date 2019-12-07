@@ -18,5 +18,5 @@ fun <T : IsPageable, R : IsPageableDto> LocalPage<T>.toPageDto(list: List<R>): P
 }
 
 fun <T : IsPageableTable, R : IsPageable> Page<T>.toLocalPage(list: List<R>): LocalPage<R> {
-    return LocalPage(this.number, this.numberOfElements, this.totalPages, this.size.toLong(), list)
+    return LocalPage(this.number, this.size.toLong(), list)
 }

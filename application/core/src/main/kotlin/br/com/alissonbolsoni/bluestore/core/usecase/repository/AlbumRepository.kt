@@ -9,4 +9,5 @@ interface AlbumRepository {
     fun getAlbumsByGenre(genre: String, pageable: LocalPageable?): LocalPage<Album>
     fun getAllAlbums(pageable: LocalPageable?): LocalPage<Album>
     fun getAlbumByIds(ids: List<Int>): List<Album>
+    fun existsId(id: Int): Boolean
 }

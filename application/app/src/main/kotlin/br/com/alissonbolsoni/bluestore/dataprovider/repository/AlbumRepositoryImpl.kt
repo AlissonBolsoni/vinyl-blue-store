@@ -42,4 +42,8 @@ class AlbumRepositoryImpl(
         return albumDao.findByAlbumIdIn(ids).toEntity()
     }
 
+    override fun existsId(id: Int): Boolean {
+        return albumDao.existsById(id)
+    }
+
 }

@@ -1,13 +1,10 @@
 package br.com.alissonbolsoni.bluestore.dataprovider.repository
 
-import br.com.alissonbolsoni.bluestore.core.entity.Album
 import br.com.alissonbolsoni.bluestore.core.entity.Order
-import br.com.alissonbolsoni.bluestore.core.entity.OrderResponse
 import br.com.alissonbolsoni.bluestore.core.entity.vo.LocalPage
 import br.com.alissonbolsoni.bluestore.core.entity.vo.LocalPageable
 import br.com.alissonbolsoni.bluestore.core.usecase.repository.OrderRepository
 import br.com.alissonbolsoni.bluestore.dataprovider.dao.OrderDao
-import br.com.alissonbolsoni.bluestore.dataprovider.exceptions.NotExistsAlbumException
 import br.com.alissonbolsoni.bluestore.dataprovider.exceptions.NotExistsOrderException
 import br.com.alissonbolsoni.bluestore.dataprovider.mapper.toEntity
 import br.com.alissonbolsoni.bluestore.dataprovider.mapper.toLocalPage
@@ -40,6 +37,10 @@ class OrderRepositoryImpl(
     override fun getOrderBetweenDates(start: Date, end: Date, pageable: LocalPageable?): LocalPage<Order> {
         val pageOrderTable = orderDao.findAllByDateOrderGreaterThanEqualAndDateOrderLessThanEqual(start, end, pageable.toPageable())
         return pageOrderTable.toLocalPage(pageOrderTable.content.toEntity())
+    }
+
+    override fun existsId(id: Int): Boolean {
+        return orderDao.existsById(id)
     }
 
 }

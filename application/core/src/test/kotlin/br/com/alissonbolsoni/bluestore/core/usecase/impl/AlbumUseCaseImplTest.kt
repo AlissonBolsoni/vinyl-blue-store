@@ -4,10 +4,12 @@ import br.com.alissonbolsoni.bluestore.core.entity.Album
 import br.com.alissonbolsoni.bluestore.core.entity.vo.LocalPage
 import br.com.alissonbolsoni.bluestore.core.entity.vo.LocalPageable
 import br.com.alissonbolsoni.bluestore.core.usecase.repository.AlbumRepository
+import br.com.alissonbolsoni.bluestore.core.usecase.repository.GenreRepository
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import java.lang.IllegalArgumentException
 
 internal class AlbumUseCaseImplTest {
     private val idSuccess = 10
@@ -19,29 +21,30 @@ internal class AlbumUseCaseImplTest {
     private val genderError = "funk"
 
     private val albumRepository = mockk<AlbumRepository>().also {
-        every { it.getAlbumById(any()) } answers {
-            if (args[0] == idSuccess)
-                album
-            else
-                throw Exception()
+        every { it.existsId(any<Int>()) } answers {
+            args[0] as Int != 0
         }
-        every { it.getAllAlbums(any<LocalPageable>()) } answers {
-            if ((args[0] as LocalPageable).number > 0)
-                LocalPage(0, 0, 0, 0, ArrayList())
+        every { it.getAlbumById(any()) } returns album
+        every { it.getAllAlbums(any<LocalPageable>()) } returns
+                LocalPage(1, 1, arrayListOf(album))
+        every { it.getAlbumsByGenre(any<String>(), any<LocalPageable>()) } returns
+                LocalPage(1, 1, arrayListOf(album))
+    }
+
+    private val genreRepository = mockk<GenreRepository>().also {
+        every { it.existsGenre(any()) } answers {
+            if (args[0] == genderError)
+                throw IllegalArgumentException()
             else
-                LocalPage(1, 1, 1, 1, arrayListOf(album))
-        }
-        every { it.getAlbumsByGenre(any<String>(), any<LocalPageable>()) } answers {
-            if ((args[1] as LocalPageable).number > 0 || args[0] == genderError)
-                LocalPage(0, 0, 0, 0, ArrayList())
-            else
-                LocalPage(1, 1, 1, 1, arrayListOf(album))
+                true
         }
     }
 
+    private val useCase = AlbumUseCaseImpl(albumRepository, genreRepository)
+
     @Test
     fun testGetAlbumByIdWithSuccess() {
-        val albumById = albumRepository.getAlbumById(idSuccess)
+        val albumById = useCase.getAlbumBy(idSuccess)
         assertEquals(idSuccess, albumById.id)
         assertEquals(albumName, albumById.name)
         assertEquals(albumPrice, albumById.price)
@@ -50,13 +53,13 @@ internal class AlbumUseCaseImplTest {
     @Test
     fun testGetAlbumByIdWithError() {
         assertThrows(Exception::class.java) {
-            albumRepository.getAlbumById(idError)
+            useCase.getAlbumBy(idError)
         }
     }
 
     @Test
-    fun testGetAllAlbumsWithSuccess() {
-        val allAlbums = albumRepository.getAllAlbums(LocalPageable(0, 20))
+    fun testGetAllAlbums() {
+        val allAlbums = useCase.getAlbums(LocalPageable(0, 20))
 
         assertFalse(allAlbums.elements.isEmpty())
         assertEquals(idSuccess, allAlbums.elements.first().id)
@@ -64,16 +67,10 @@ internal class AlbumUseCaseImplTest {
         assertEquals(albumPrice, allAlbums.elements.first().price)
     }
 
-    @Test
-    fun testGetAllAlbumsWithError() {
-        val allAlbums = albumRepository.getAllAlbums(LocalPageable(1, 20))
-        assertTrue(allAlbums.elements.isEmpty())
-    }
-
 
     @Test
     fun testGetAlbumsByGenreWithSuccess() {
-        val allAlbums = albumRepository.getAlbumsByGenre(genderSuccess, LocalPageable(0, 20))
+        val allAlbums = useCase.getAlbumsByGenre(genderSuccess, LocalPageable(0, 20))
 
         assertFalse(allAlbums.elements.isEmpty())
         assertEquals(idSuccess, allAlbums.elements.first().id)
@@ -83,14 +80,10 @@ internal class AlbumUseCaseImplTest {
 
     @Test
     fun testGetAlbumsByGenreWithGenreError() {
-        val allAlbums = albumRepository.getAlbumsByGenre(genderError, LocalPageable(0, 20))
-        assertTrue(allAlbums.elements.isEmpty())
+        assertThrows(IllegalArgumentException::class.java){
+            useCase.getAlbumsByGenre(genderError, LocalPageable(0, 20))
+        }
     }
 
-    @Test
-    fun testGetAlbumsByGenreWithPageError() {
-        val allAlbums = albumRepository.getAlbumsByGenre(genderSuccess, LocalPageable(1, 20))
-        assertTrue(allAlbums.elements.isEmpty())
-    }
 
 }

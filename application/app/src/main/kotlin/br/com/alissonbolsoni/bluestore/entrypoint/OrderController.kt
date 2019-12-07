@@ -11,9 +11,12 @@ import br.com.alissonbolsoni.bluestore.entrypoint.dto.OrderDto
 import br.com.alissonbolsoni.bluestore.entrypoint.dto.OrderRequestDto
 import br.com.alissonbolsoni.bluestore.entrypoint.dto.OrderResponseDto
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -35,14 +38,15 @@ class OrderController(
 
     @PostMapping(value = [PATH_REGISTER])
     fun registerOrder(@RequestBody orderRequestDto: OrderRequestDto): ResponseEntity<OrderResponseDto> {
-        if (orderRequestDto.albums.isEmpty())
-            return ResponseEntity(
-                OrderResponseDto(message = "A lista de albums não pode ser vazia"),
+        return try {
+            val registerNewOrder = newOrderUseCase.registerNewOrder(orderRequestDto.albums)
+            ResponseEntity(registerNewOrder.toDto(), HttpStatus.OK)
+        } catch (e: Exception) {
+            ResponseEntity(
+                OrderResponseDto(message = e.localizedMessage),
                 HttpStatus.NOT_ACCEPTABLE
             )
-
-        val registerNewOrder = newOrderUseCase.registerNewOrder(orderRequestDto.albums)
-        return ResponseEntity(registerNewOrder.toDto(), HttpStatus.OK)
+        }
     }
 
     @GetMapping(value = [PATH_GET_BY_ID])
@@ -62,12 +66,24 @@ class OrderController(
         @RequestParam("start") start: Date,
         @DateTimeFormat(pattern = "dd/MM/yyyy")
         @RequestParam("end") end: Date,
-        page: Int?, size: Int?): Page<OrderDto?>? {
-        if(start.after(end)) throw IllegalArgumentException("Data de início maior que a data final")
+        page: Int?, size: Int?
+    ): ResponseEntity<Page<OrderDto?>?> {
+        return try {
+            val localPageable = LocalPageable(page ?: 0, size ?: 20)
+            val order = orderUseCase.getOrderBetweenDates(start, end, localPageable)
+            ResponseEntity(order.toPageDto(order.elements.toDto()), HttpStatus.OK)
+        } catch (e: Exception) {
+            val orderDto = PageImpl<OrderDto>(
+                listOf(OrderDto().apply { message = e.localizedMessage }),
+                PageRequest.of(0, 1),
+                1
+            )
+            ResponseEntity(
+                orderDto,
+                HttpStatus.NOT_ACCEPTABLE
+            )
+        }
 
-        val localPageable = LocalPageable(page?: 0, size?: 20)
-        val order = orderUseCase.getOrderBetweenDates(start, end, localPageable)
-        return order.toPageDto(order.elements.toDto())
     }
 
 }

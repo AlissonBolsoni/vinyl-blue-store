@@ -4,7 +4,6 @@ import br.com.alissonbolsoni.bluestore.core.entity.vo.LocalPageable
 import br.com.alissonbolsoni.bluestore.core.usecase.NewOrderUseCase
 import br.com.alissonbolsoni.bluestore.core.usecase.OrderUseCase
 import br.com.alissonbolsoni.bluestore.dataprovider.mapper.toDto
-import br.com.alissonbolsoni.bluestore.dataprovider.mapper.toResponseDto
 import br.com.alissonbolsoni.bluestore.dataprovider.mapper.toPageDto
 import br.com.alissonbolsoni.bluestore.entrypoint.OrderController.Companion.PATH
 import br.com.alissonbolsoni.bluestore.entrypoint.dto.OrderDto
@@ -16,9 +15,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
-import java.lang.IllegalArgumentException
 import java.util.*
 import javax.inject.Named
 

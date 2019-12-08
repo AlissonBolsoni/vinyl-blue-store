@@ -1,8 +1,6 @@
 package br.com.alissonbolsoni.bluestore.dataprovider.entity
 
-import br.com.alissonbolsoni.bluestore.core.entity.Album
 import br.com.alissonbolsoni.bluestore.entrypoint.dto.IsPageableTable
-import com.wrapper.spotify.model_objects.specification.Track
 import java.math.RoundingMode
 import java.util.*
 import javax.persistence.*

@@ -3,11 +3,9 @@ package br.com.alissonbolsoni.bluestore.entrypoint
 import br.com.alissonbolsoni.bluestore.core.entity.vo.LocalPageable
 import br.com.alissonbolsoni.bluestore.core.usecase.AlbumsUseCase
 import br.com.alissonbolsoni.bluestore.dataprovider.mapper.toAlbumDTO
-import br.com.alissonbolsoni.bluestore.dataprovider.mapper.toDto
 import br.com.alissonbolsoni.bluestore.dataprovider.mapper.toPageDto
 import br.com.alissonbolsoni.bluestore.entrypoint.AlbumsController.Companion.PATH
 import br.com.alissonbolsoni.bluestore.entrypoint.dto.AlbumDTO
-import br.com.alissonbolsoni.bluestore.entrypoint.dto.OrderDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import javax.inject.Named
-
 
 @RestController
 @RequestMapping(PATH)

@@ -6,7 +6,6 @@ import com.wrapper.spotify.model_objects.credentials.ClientCredentials
 import com.wrapper.spotify.model_objects.specification.Paging
 import com.wrapper.spotify.model_objects.specification.Track
 import java.io.IOException
-import java.util.*
 
 class SpotifyApiConnector {
     companion object {
@@ -29,11 +28,11 @@ class SpotifyApiConnector {
     }
 
     @Throws(IOException::class, SpotifyWebApiException::class)
-    fun findTrackByGenre(genre: String): Paging<Track>? {
-        Objects.requireNonNull(genre)
+    fun findTrackByGenre(genre: String, size: Int): Paging<Track>? {
         val request = spotifyApi
             .searchTracks(String.format(QUERY_BY_GENRE, genre))
             .limit(50)
+            .offset(size)
             .build()
 
         return request.execute()

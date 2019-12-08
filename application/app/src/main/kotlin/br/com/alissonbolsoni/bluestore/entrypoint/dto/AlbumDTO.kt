@@ -1,7 +1,5 @@
 package br.com.alissonbolsoni.bluestore.entrypoint.dto
 
-import br.com.alissonbolsoni.bluestore.core.entity.Album
-
 class AlbumDTO (
     val albumId: Int = 0,
     val albumName: String = "",

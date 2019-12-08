@@ -12,9 +12,9 @@ import com.wrapper.spotify.model_objects.specification.Track
 open class SpotifyRepository {
 
     @Throws(IOException::class, SpotifyWebApiException::class)
-    fun findTracks(genre: String): Paging<Track>{
+    fun findTracks(genre: String, size: Int): Paging<Track>{
         val spotifyApiConnector = SpotifyApiConnector()
-        return spotifyApiConnector.findTrackByGenre(genre) ?: throw SpotifyImportException()
+        return spotifyApiConnector.findTrackByGenre(genre, size) ?: throw SpotifyImportException()
     }
 
 }

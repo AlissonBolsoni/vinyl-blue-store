@@ -1,10 +1,10 @@
 package br.com.alissonbolsoni.bluestore.configuration
 
-import br.com.alissonbolsoni.bluestore.dataprovider.entity.CashbackGenreTable
-import br.com.alissonbolsoni.bluestore.dataprovider.entity.GenreTable
+import br.com.alissonbolsoni.bluestore.core.usecase.SpotifyUseCase
 import br.com.alissonbolsoni.bluestore.dataprovider.dao.CashbackDao
 import br.com.alissonbolsoni.bluestore.dataprovider.dao.GenreDao
-import br.com.alissonbolsoni.bluestore.dataprovider.start.spotify.SpotifyGenreImport
+import br.com.alissonbolsoni.bluestore.dataprovider.entity.CashbackGenreTable
+import br.com.alissonbolsoni.bluestore.dataprovider.entity.GenreTable
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct
 class Startup @Autowired constructor(
     private val genreDao: GenreDao,
     private val cashbackDao: CashbackDao,
-    private val spotifyGenreImport: SpotifyGenreImport
+    private val spotifyUseCase: SpotifyUseCase
 ) {
 
     @PostConstruct
@@ -32,10 +32,11 @@ class Startup @Autowired constructor(
         importSpotifyDiscs()
     }
 
+    //Site usado para gerar a CRON http://www.cronmaker.com/
     @Scheduled(cron = "0 0 0/1 1/1 * ?")
     private fun importSpotifyDiscs() {
         try {
-            spotifyGenreImport.syncDiscs()
+            spotifyUseCase.syncDiscs()
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -83,7 +84,7 @@ class Startup @Autowired constructor(
             mutableListOf(
                 CashbackGenreTable(cashbackGenreTable = classic, cashbackDayOfWeek = 1, cashbackValue = 0.35),
                 CashbackGenreTable(cashbackGenreTable = classic, cashbackDayOfWeek = 2, cashbackValue = 0.03),
-                CashbackGenreTable(cashbackGenreTable = classic, cashbackDayOfWeek = 3, cashbackValue = 0.5),
+                CashbackGenreTable(cashbackGenreTable = classic, cashbackDayOfWeek = 3, cashbackValue = 0.05),
                 CashbackGenreTable(cashbackGenreTable = classic, cashbackDayOfWeek = 4, cashbackValue = 0.08),
                 CashbackGenreTable(cashbackGenreTable = classic, cashbackDayOfWeek = 5, cashbackValue = 0.13),
                 CashbackGenreTable(cashbackGenreTable = classic, cashbackDayOfWeek = 6, cashbackValue = 0.18),

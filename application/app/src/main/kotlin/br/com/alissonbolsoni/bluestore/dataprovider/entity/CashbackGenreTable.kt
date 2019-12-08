@@ -1,7 +1,7 @@
 package br.com.alissonbolsoni.bluestore.dataprovider.entity
 
 import javax.persistence.*
-import javax.persistence.FetchType.*
+import javax.persistence.FetchType.LAZY
 
 @Entity(name = "cashback_by_genre")
 open class CashbackGenreTable(

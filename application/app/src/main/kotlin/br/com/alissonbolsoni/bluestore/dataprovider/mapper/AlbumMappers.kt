@@ -1,7 +1,6 @@
 package br.com.alissonbolsoni.bluestore.dataprovider.mapper
 
 import br.com.alissonbolsoni.bluestore.core.entity.Album
-import br.com.alissonbolsoni.bluestore.core.entity.Order
 import br.com.alissonbolsoni.bluestore.dataprovider.entity.AlbumOrderedTable
 import br.com.alissonbolsoni.bluestore.dataprovider.entity.AlbumTable
 import br.com.alissonbolsoni.bluestore.entrypoint.dto.AlbumDTO
@@ -39,14 +38,6 @@ fun AlbumTable.toEntity(): Album {
 
     album.genre = this.albumGenreTable?.toEntity()
     return album
-}
-
-fun List<Album>.toAlbumOrderedTable(): ArrayList<AlbumOrderedTable> {
-    val albums = ArrayList<AlbumOrderedTable>()
-    this.forEach {
-        albums.add(it.toAlbumOrderedTable())
-    }
-    return albums
 }
 
 fun Album.toAlbumOrderedTable() = AlbumOrderedTable(

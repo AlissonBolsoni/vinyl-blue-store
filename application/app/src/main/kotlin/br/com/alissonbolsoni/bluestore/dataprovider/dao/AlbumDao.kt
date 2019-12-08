@@ -12,4 +12,5 @@ interface AlbumDao : PagingAndSortingRepository<AlbumTable, Int> {
     fun findAllByAlbumGenreTableGenreNameIgnoreCaseOrderByAlbumName(name: String, pageable: Pageable): Page<AlbumTable>
     fun findAllByOrderByAlbumName(pageable: Pageable): Page<AlbumTable>
     fun findByAlbumIdIn(ids: List<Int>): List<AlbumTable>
+    fun findAllByAlbumGenreTableGenreName(name: String): List<AlbumTable>
 }

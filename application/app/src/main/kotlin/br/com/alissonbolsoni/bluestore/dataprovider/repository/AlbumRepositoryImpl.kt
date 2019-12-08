@@ -4,11 +4,11 @@ import br.com.alissonbolsoni.bluestore.core.entity.Album
 import br.com.alissonbolsoni.bluestore.core.entity.vo.LocalPage
 import br.com.alissonbolsoni.bluestore.core.entity.vo.LocalPageable
 import br.com.alissonbolsoni.bluestore.core.usecase.repository.AlbumRepository
+import br.com.alissonbolsoni.bluestore.dataprovider.dao.AlbumDao
 import br.com.alissonbolsoni.bluestore.dataprovider.exceptions.NotExistsAlbumException
 import br.com.alissonbolsoni.bluestore.dataprovider.mapper.toEntity
 import br.com.alissonbolsoni.bluestore.dataprovider.mapper.toLocalPage
 import br.com.alissonbolsoni.bluestore.dataprovider.mapper.toPageable
-import br.com.alissonbolsoni.bluestore.dataprovider.dao.AlbumDao
 import org.springframework.beans.factory.annotation.Autowired
 import javax.inject.Named
 

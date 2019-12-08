@@ -4,14 +4,12 @@ import br.com.alissonbolsoni.bluestore.core.entity.Album
 import br.com.alissonbolsoni.bluestore.core.entity.Cashback
 import br.com.alissonbolsoni.bluestore.core.entity.Order
 import br.com.alissonbolsoni.bluestore.core.entity.OrderResponse
-import br.com.alissonbolsoni.bluestore.core.mapper.toOrderResponse
 import br.com.alissonbolsoni.bluestore.dataprovider.entity.AlbumOrderedTable
 import br.com.alissonbolsoni.bluestore.dataprovider.entity.OrderTable
 import br.com.alissonbolsoni.bluestore.entrypoint.dto.OrderDto
 import br.com.alissonbolsoni.bluestore.entrypoint.dto.OrderResponseDto
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 fun List<OrderTable>.toEntity() =
     this.map { it.toEntity() }.toList()
@@ -28,14 +26,6 @@ fun OrderTable.toEntity() =
         this.albumsOrdered.toMap()
     )
 
-fun List<AlbumOrderedTable>.toEntity(): ArrayList<Album> {
-    val albums = ArrayList<Album>()
-    this.forEach {
-        albums.add(it.toEntity())
-    }
-    return albums
-}
-
 fun AlbumOrderedTable.toEntity(): Album{
     val album = Album(
         this.albumTable?.albumId ?: 0,
@@ -45,9 +35,6 @@ fun AlbumOrderedTable.toEntity(): Album{
     album.genre = this.albumTable?.albumGenreTable?.toEntity()
     return album
 }
-
-fun List<OrderResponse>.toResponseDto():List<OrderResponseDto> =
-    this.map { it.toDto() }.toList()
 
 fun OrderResponse.toDto() = OrderResponseDto(
     this.orderId,
